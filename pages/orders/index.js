@@ -2,6 +2,8 @@ import axios from "axios";
 import { Layout } from "components/Layout";
 import { OrderCard } from "components/OrderCard";
 import { ProductCard } from "components/ProductCard";
+import absoluteUrl from "next-absolute-url";
+
 
 function OrdersPage({ orders = [] }) {
   const renderProducts = () => {
@@ -20,8 +22,9 @@ function OrdersPage({ orders = [] }) {
 
 export default OrdersPage;
 
-export const getServerSideProps = async () => {
-  const { data: orders } = await axios.get("/api/orders");
+export const getServerSideProps = async ({req, res}) => {
+  const { origin } = absoluteUrl(req)
+  const { data: orders } = await axios.get(origin + "/api/orders");
 
   return {
     props: {

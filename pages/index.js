@@ -7,8 +7,9 @@ import Image from "next/legacy/image";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import absoluteUrl from 'next-absolute-url'
 
-function Index({ products = [] }) {
+function Index({ products = [] , base_url}) {
   const renderProducts = () => {
     if (products.length === 0) return <h1>No Products</h1>;
     return products.map((product) => (
@@ -60,7 +61,7 @@ function Index({ products = [] }) {
     }
     try {
       setLoading(true);
-      const res = await axios.post("/api/orders", {
+      const res = await axios.post(base_url + "/api/orders", {
         size: selectedSize,
         color: selectedColor,
         name: name,
@@ -287,14 +288,16 @@ function Index({ products = [] }) {
 
 export default Index;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({req, res}) => {
+  const { origin } = absoluteUrl(req)
   const { data: products } = await axios.get(
-    "/api/products"
+    origin + "/api/products"
   );
 
   return {
     props: {
-      products,
+      products: products,
+      base_url: origin
     },
   };
 };

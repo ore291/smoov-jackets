@@ -13,6 +13,7 @@
     "flowbite-react": "^0.4.2",
     "mysql2": "^2.3.3",
     "next": "^13.2.3",
+    "next-absolute-url": "^1.2.2",
     "order-id": "^2.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
