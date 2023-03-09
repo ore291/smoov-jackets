@@ -289,7 +289,7 @@ export default Index;
 
 export const getServerSideProps = async () => {
   const { data: products } = await axios.get(
-    "http://localhost:3000/api/products"
+    "/api/products"
   );
 
   return {

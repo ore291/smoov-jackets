@@ -21,7 +21,7 @@ function OrdersPage({ orders = [] }) {
 export default OrdersPage;
 
 export const getServerSideProps = async () => {
-  const { data: orders } = await axios.get("http://localhost:3000/api/orders");
+  const { data: orders } = await axios.get("/api/orders");
 
   return {
     props: {
