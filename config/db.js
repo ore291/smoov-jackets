@@ -1,8 +1,9 @@
 import mysql from "serverless-mysql";
 
+let pool;
 
-
-const pool = mysql({
+try {
+   pool = mysql({
   config: {
     host: "sql8.freemysqlhosting.net",
     user: "sql8604058",
@@ -11,6 +12,11 @@ const pool = mysql({
     database: "sql8604058",
   },
 });
+} catch (error) {
+  console.log(error)
+}
+
+
 // const pool = mysql({
 //   config: {
 //     host: "localhost",

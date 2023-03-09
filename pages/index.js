@@ -3,7 +3,7 @@ import JacketCard from "components/JacketCard";
 import { Layout } from "components/Layout";
 import { ProductCard } from "components/ProductCard";
 import { Button, Modal } from "flowbite-react";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
@@ -247,7 +247,7 @@ function Index({ products = [] }) {
         </div>
       </div>
       <Toaster />
-      {typeof window !== "undefined" && result != null && (
+      {typeof window !== "undefined" && result !== null && (
         <React.Fragment>
           <Modal size="md" popup={true} show={showModal} onClose={onClose}>
             <Modal.Header />
