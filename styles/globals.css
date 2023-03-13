@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-image: url('/bg.jpg');
+}
+
+
+
+
+
+.slick-arrow.slick-next:before {
+  content: "";
+}
+
+.slick-arrow.slick-prev:before {
+  content: "";
+}
+
+#__next
+  > div
+  > div.w-full.py-2
+  > div.grid.grid-cols-1.md\:grid-cols-12.p-2.gap-y-3.md\:p-10.md\:px-16.gap-x-3
+  > form
+  > div.border.rounded-md.border-\[\#DDDDDD\].w-full
+  > div
+  > button{
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+  .PhoneInputInput {
+  border-radius: 8px !important;
+}
+
+.PhoneInputInput::focus {
+  border: 8px #3b82f6 !important;
+  outline: 8px #3b82f6 !important;
+}
+
+.PhoneInputInput::placeholder {
+  font-size: 12px !important;
+}
+
+--PhoneInput-color--focus — Flag icon {
+  outline: 0;
+}
+
+#__next
+  > div
+  > div.w-full.py-2
+  > div.grid.grid-cols-1.md\:grid-cols-12.p-2.gap-y-3.md\:p-10.md\:px-20
+  > div.col-span-3.flex.flex-col.space-y-2.h-full.items-center
+  > div.border.rounded-md.border-\[\#DDDDDD\].p-2.md\:p-4.w-full
+  > div
+  > button
+  > svg {
+  color: black !important;
+}

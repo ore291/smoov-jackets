@@ -1,5 +1,8 @@
 import Head from "next/head";
 import "../styles/globals.css";
+import { Jost } from "next/font/google";
+
+const jost = Jost({ subsets: ["latin"] });
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -11,6 +14,11 @@ function MyApp({ Component, pageProps }) {
         />
         <title>VarsityJacketPlug</title>
       </Head>
+      <style>{`
+        html {
+          font-family: ${jost.style.fontFamily};
+        }
+      `}</style>
 
       <Component {...pageProps} />
     </>
