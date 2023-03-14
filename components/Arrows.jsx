@@ -7,6 +7,7 @@ export const  SampleNextArrow = (props) => {
         onClick={onClick}
       >
         <svg
+      
           width={30}
           height={31}
           viewBox="0 0 40 41"

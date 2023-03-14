@@ -7,7 +7,7 @@ import { CirclePicker } from "react-color";
 import Image from "next/image";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { BsCheckCircle } from "react-icons/bs";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,16 +16,20 @@ import Checked from "components/Checked";
 import Unchecked from "components/Unchecked";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { FaBeer } from "react-icons/fa";
+import { MdContentCopy } from "react-icons/md";
+import {FaTimesCircle} from "react-icons/fa"
 import { SampleNextArrow, SamplePrevArrow } from "components/Arrows";
+import Whatsapp from "components/Whatsapp";
+import { isMobile } from "react-device-detect";
 
-function Index({ products = [], base_url }) {
+function Index({ jackets = [], base_url }) {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    arrows: isMobile ? false : true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
@@ -42,11 +46,12 @@ function Index({ products = [], base_url }) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onClose = () => {
     setShowModal(false);
   };
-
+  
   const sizes = [
     { name: "Small", value: "s" },
     { name: "Medium", value: "m" },
@@ -63,14 +68,20 @@ function Index({ products = [], base_url }) {
   const [selectedJacket, setSelectedJacket] = useState(0);
   const [result, setResult] = useState(null);
 
-  const jackets = ["red", "blue", "yellow", "indigo"];
-
   const reset = () => {
     setSelectedSize("m");
     setSelectedColor("black");
     setName("");
     setSelectedJacket(0);
+    setPhone("");
+    setEmail("");
   };
+
+  const onErrorClose = () => {
+    reset()
+    setShowErrorModal(false);
+  };
+
 
   const [loading, setLoading] = useState(false);
 
@@ -84,28 +95,32 @@ function Index({ products = [], base_url }) {
     try {
       setLoading(true);
       const res = await axios.post(base_url + "/api/orders", {
+        product_id: jackets[selectedJacket]?.id,
         size: selectedSize,
         color: selectedColor,
         name: name,
+        email: email,
+        phone: phone,
       });
 
       if (res.status == 200) {
         setResult(res.data);
         setLoading(false);
-        toast.success("Order Saved", {
-          position: "top-right",
-        });
+        // toast.success("Order Saved", {
+        //   position: "top-right",
+        // });
         reset();
         setShowModal(true);
       }
     } catch (error) {
       setLoading(false);
       toast.error(error.response.data.message);
+      setShowErrorModal(true)
     }
   };
 
   const copyText = () => {
-    navigator.clipboard.writeText(result.order_id);
+    navigator.clipboard.writeText(result?.order_id);
     toast.success("Copied", {
       position: "top-right",
     });
@@ -114,29 +129,33 @@ function Index({ products = [], base_url }) {
   return (
     <div className="max-w-full mx-auto">
       <div
-        className="flex flex-col md:flex-row items-center w-full justify-center p-2  space-x-2 border-b border-[#E9EBF0]
+        className="flex flex-col md:flex-row items-start md:items-center w-full justify-center p-3  space-x-2 border-b border-[#E9EBF0]
 "
       >
         <Image src="/unilag.png" alt="" className="" width={60} height={60} />
-        <h1 className=" text-[#333333] font-semibold leading-9 text-xl text-center">
+        <h1 className=" text-[#333333] hidden md:block font-semibold leading-9 text-xl text-center">
           Department of History, University of lagos
         </h1>
       </div>
       <div className="w-full py-2 ">
-        <div className="w-full flex justify-center my-4">
-          <h2 className="text-center md:max-w-[600px] text-[#666666] text-sm font-normal">
+        <div className="w-full flex flex-col justify-center md:items-center space-y-4 p-2 my-4">
+          <h1 className="md:hidden text-center font-semibold text-3xl">
+          Department of History, University of lagos 
+          </h1>
+          <h2 className="text-center md:max-w-[600px] text-[#667085] text-sm font-normal">
             Welcome to the department of history final year varsity jacket sign
             out designs, please select your preferred design choice for your
             jacket below
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-12 p-2 gap-y-3 md:p-10 md:px-16 gap-x-3">
-          <div className="col-span-1 flex justify-center md:justify-end items-start h-full">
-            <div className="flex flex-row justify-center items-center w-full md:max-w-[80px] space-x-2 md:flex-col md:space-y-3 md:border md:border-[#DDDDDD] p-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 p-2 gap-y-3 md:p-10 md:px-16 md:gap-x-3">
+          <div className="md:col-span-1 flex justify-center md:justify-end items-start h-full">
+            <div className="overflow-hidden flex flex-row justify-center items-center  max-w-[80%] md:max-w-[80px] space-x-2 md:flex-col md:space-y-3 border border-[#DDDDDD] p-2 rounded md:rounded-none md:p-4">
               {jackets.map((jacket, i) => (
                 <JacketCard
                   key={i}
                   id={i}
+                  jacket={jacket}
                   setSelectedJacket={setSelectedJacket}
                   selectedJacket={selectedJacket}
                 />
@@ -144,7 +163,7 @@ function Index({ products = [], base_url }) {
 
               <button
                 onClick={() => reset()}
-                className="border hidden md:flex items-center justify-center p-1 px-2 hover:bg-red-500 group"
+                className="border flex items-center justify-center p-1 px-2 hover:bg-red-500 group"
               >
                 <span className="text-[#666666] group-hover:text-white text-xs font-semibold">
                   Reset
@@ -154,33 +173,52 @@ function Index({ products = [], base_url }) {
           </div>
 
           <div className="col-span-7  md:px-10  ">
-            <Slider {...settings}>
-              <div className=" !flex items-center justify-center">
-                <div className="relative w-[300px] h-[350px]">
-                  <Image
-                    src={`/jacket.png`}
-                    alt=""
-                    fill
-                    className="object-fit "
-                  />
+            {jackets.length > 0 && (
+              <Slider {...settings}>
+                <div className=" !flex items-center justify-center">
+                  <div className="relative w-[380px] h-[380px]">
+                    <Image
+                      src={jackets[selectedJacket].front}
+                      alt=""
+                      fill
+                      className="object-fit "
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className=" !flex items-center justify-center">
-                <div className="relative w-[300px] h-[350px]">
-                  <Image
-                    src={`/jacket.png`}
-                    alt=""
-                    fill
-                    className="object-fit "
-                  />
+                <div className=" !flex items-center justify-center">
+                  <div className="relative w-[350px] h-[380px]">
+                    <Image
+                      src={jackets[selectedJacket].back}
+                      alt=""
+                      fill
+                      className="object-fit "
+                    />
+                  </div>
                 </div>
-              </div>
-            </Slider>
+                <div className=" !flex items-center justify-center">
+                  <div className="relative w-[350px] h-[380px]">
+                    <Image
+                      src={jackets[selectedJacket].right_side}
+                      alt=""
+                      fill
+                      className="object-fit "
+                    />
+                  </div>
+                </div>
+              </Slider>
+            )}
             <div className="w-full flex flex-col items-center space-y-4 justify-center my-10  ">
               <p className="text-center font-semibold text-2xl">Select Color</p>
               <div className="border p-2 rounded-md bg-white shadow-lg">
                 <CirclePicker
-                  colors={["#000000", "#F4F4F4", "#2970FF", "#6A5353", "#E2BB8D", "#151867"]}
+                  colors={[
+                    "#000000",
+                    "#F4F4F4",
+                    "#2970FF",
+                    "#6A5353",
+                    "#E2BB8D",
+                    "#151867",
+                  ]}
                   onChange={(color) => setSelectedColor(color.hex)}
                   color={selectedColor}
                 />
@@ -189,9 +227,9 @@ function Index({ products = [], base_url }) {
           </div>
           <form
             onSubmit={(e) => handleSubmit(e)}
-            className="col-span-4 flex flex-col space-y-2 h-full items-center "
+            className="col-span-4 flex flex-col p-2  mb-5 md:mb-0 space-y-3 h-full items-center "
           >
-            <div className="border rounded-md border-[#DDDDDD] w-full">
+            <div className="border rounded-md border-[#DDDDDD]  w-full">
               <Accordion alwaysOpen={true} flush={true}>
                 <Accordion.Panel className="!py-2">
                   <Accordion.Title>
@@ -232,7 +270,7 @@ function Index({ products = [], base_url }) {
                 </Accordion.Panel>
               </Accordion>
             </div>
-            <div className="w-full my-4 p-1 md:p-0">
+            <div className="w-full my-4 p-2 md:p-0">
               <label
                 htmlFor="small-input"
                 className="block mb-2 text-sm font-medium text-[#666666] dark:text-white"
@@ -282,10 +320,10 @@ function Index({ products = [], base_url }) {
                 onChange={setPhone}
               />
             </div>
-            <button
+            <div className="py-5 md:my-0 w-full"> <button
               type="submit"
               disabled={loading}
-              className="text-white flex justify-center w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className="text-white flex justify-center w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3   dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
               {loading ? (
                 <div role="status">
@@ -310,66 +348,82 @@ function Index({ products = [], base_url }) {
               ) : (
                 <span>Submit</span>
               )}
-            </button>
+            </button></div>
+           
 
-            {/* <div className="border rounded-md border-[#DDDDDD] p-2 md:p-4 w-full">
-              <h3 className="mb-4 font-semibold text-[#666666] pb-1 dark:text-white border-b border-gray-200 ">
-                Select Color
-              </h3>
-
-              <div>
-                <select
-                  id="color"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0  block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-0 "
-                >
-                  {colors.map((color, i) => (
-                    <option
-                      key={i}
-                      defaultValue
-                      value={color.value}
-                      onChange={(e) => setSelectedColor(e.currentTarget.value)}
-                      className="  bg-gray-100 border-gray-300  focus:ring-0 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500"
-                    >
-                      {color.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div> */}
+           
           </form>
         </div>
       </div>
       <Toaster />
-      {typeof window !== "undefined" && result !== null && (
-        <React.Fragment>
-          <Modal size="md" popup={true} show={showModal} onClose={onClose}>
-            <Modal.Header />
-            <Modal.Body>
-              <div className="text-center">
-                <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Order Confirmed
-                </h3>
-                <h3 className="my-5 text-2xl font-normal text-black dark:text-gray-400">
-                  Order ID: {result.order_id}
-                </h3>
+      {typeof window !== "undefined" && (
+        <Modal size="md" popup={true} show={showModal} onClose={onClose}>
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <BsCheckCircle className="mx-auto mb-4 h-14 w-14 text-[#1FAF38] dark:text-gray-200" />
+              <h3 className="mb-5 text-2xl font-medium text-[#333333] dark:text-gray-400">
+                Submitted Successfully
+              </h3>
+              <p className="flex items-center space-x-1 justify-center text-center my-2 text-sm font-normal text-[#667085] dark:text-gray-400">
+                Confirmation ID:{" "}
+                <span className="text-[#2970FF]">{result?.order_id}</span>{" "}
+                <button color="gray" onClick={() => copyText()}>
+                  <MdContentCopy />
+                </button>
+              </p>
+              <p className="my-3 text-sm text-[#667085] text-center font-medium">
+                Thank you for your time! 🙂. Kindly Pay your final year jacket
+                money to your class representative before the deadline. Click
+                the button below to share your confirmation ID to your class
+                representative
+              </p>
 
-                <div className="flex justify-center gap-4">
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`https://wa.me/2348181493942?text=Hello%2C+I+want+to+book+my+custom+varsity+jacket%2C+my+order+ID+is+${result.order_id}`}
+              <div className="flex justify-center gap-4">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`https://wa.me/2348181493942?text=Hello%2C+I+want+to+book+my+custom+varsity+jacket%2C+my+Confirmation+ID+is+${result?.order_id}`}
+                >
+                  <button
+                  
+                    className=" flex justify-center bg-[#1FAF38]  w-[280px] my-5 h-12 p-1 rounded cursor-pointer items-center space-x-2"
                   >
-                    <Button color="success">Message Course Rep</Button>
-                  </a>
-                  <Button color="gray" onClick={() => copyText()}>
-                    Copy ID
-                  </Button>
-                </div>
+                    <Whatsapp className="mr-2" /> <span className="text-white font-bold text-lg">Whatsapp</span>
+                  </button>
+                </a>
               </div>
-            </Modal.Body>
-          </Modal>
-        </React.Fragment>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
+      {typeof window !== "undefined" && (
+        <Modal size="md" popup={true} show={showErrorModal} onClose={onErrorClose}>
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <FaTimesCircle className="mx-auto mb-4 h-14 w-14 text-[#F04438] dark:text-gray-200" />
+              <h3 className="mb-5 text-2xl font-medium text-[#333333] dark:text-gray-400">
+              Submission Failed
+              </h3>
+              
+              <p className="my-3 text-sm text-[#667085] text-center font-medium">
+              Something went wrong. Click the button below to try again
+              </p>
+
+              <div className="flex justify-center gap-4">
+               
+                  <button
+                  onClick={()=>onErrorClose()}
+                    className=" flex justify-center bg-[#2970FF]  w-[250px] my-5 h-12 p-1 rounded cursor-pointer items-center space-x-2"
+                  >
+                   <span className="text-white font-bold text-lg">Try again</span>
+                  </button>
+               
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
       )}
     </div>
   );
@@ -383,7 +437,7 @@ export const getServerSideProps = async ({ req, res }) => {
 
   return {
     props: {
-      products: products,
+      jackets: products,
       base_url: origin,
     },
   };

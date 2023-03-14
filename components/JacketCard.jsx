@@ -1,7 +1,7 @@
 import Image from "next/legacy/image";
 import React from "react";
 
-const JacketCard = ({ id, setSelectedJacket, selectedJacket }) => {
+const JacketCard = ({ id, setSelectedJacket,jacket, selectedJacket }) => {
   return selectedJacket != id ? (
     <div className="  p-1 flex items-center justify-center">
       {" "}
@@ -10,7 +10,7 @@ const JacketCard = ({ id, setSelectedJacket, selectedJacket }) => {
         className="bg-[#CCCCCC] w-[45px] h-[45px] relative cursor-pointer transition-all transform hover:scale-105"
       >
         <Image
-          src={`/jacket.png`}
+          src={jacket.front}
           alt=""
           layout="fill"
           className="object-contain"
@@ -24,7 +24,7 @@ const JacketCard = ({ id, setSelectedJacket, selectedJacket }) => {
         className="bg-[#CCCCCC] w-[45px] h-[45px] relative cursor-pointer transition-all transform hover:scale-105"
       >
         <Image
-          src={`/jacket.png`}
+          src={jacket.front}
           alt=""
           layout="fill"
           className="object-contain"

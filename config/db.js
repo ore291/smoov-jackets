@@ -17,7 +17,7 @@ try {
 }
 
 
-// const pool = mysql({
+// pool = mysql({
 //   config: {
 //     host: "localhost",
 //     user: "root",

@@ -26,7 +26,7 @@ const getOrders = async (req, res) => {
 
 const saveOrder = async (req, res) => {
   try {
-    const { name, size, color } = req.body;
+    const { name, size, color , email, phone, product_id} = req.body;
 
     const order_id = orderid.generate()
 
@@ -34,7 +34,10 @@ const saveOrder = async (req, res) => {
       name : name,
       size : size,
       order_id: order_id,
-      color: color
+      color: color,
+      product_id: product_id,
+      phone: phone,
+      email : email
     });
 
     return res.status(200).json({ ...req.body, id: result.insertId , order_id: order_id});
