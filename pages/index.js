@@ -286,7 +286,7 @@ function Index({ jackets = [], base_url }) {
             <div className="w-full my-4 p-2 md:p-0">
               <label
                 htmlFor="small-input"
-                className="block mb-2 text-sm font-medium text-[#666666] dark:text-white"
+                className="block mb-2 text-sm font-medium text-[#333333] dark:text-white"
               >
                 Full Name
               </label>
@@ -304,7 +304,7 @@ function Index({ jackets = [], base_url }) {
             <div className="w-full my-4 p-1 md:p-0">
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-[#666666] dark:text-white"
+                className="block mb-2 text-sm font-medium text-[#333333] dark:text-white"
               >
                 Email
               </label>
@@ -322,7 +322,7 @@ function Index({ jackets = [], base_url }) {
             <div className="w-full my-4 p-1 md:p-0">
               <label
                 htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-[#666666] dark:text-white"
+                className="block mb-2 text-sm font-medium text-[#333333] dark:text-white"
               >
                 Phone Number
               </label>
