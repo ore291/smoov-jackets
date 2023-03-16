@@ -60,11 +60,7 @@ function Index({ jackets = [], base_url }) {
     { name: "Double Extra Large", value: "xxl" },
   ];
 
-  const colors = [
-    { name: "Black", value: "black" },
-    { name: "White", value: "white" },
-  ];
-
+  
   const [selectedJacket, setSelectedJacket] = useState(0);
   const [result, setResult] = useState(null);
 
