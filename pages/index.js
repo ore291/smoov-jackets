@@ -5,7 +5,7 @@ import { ProductCard } from "components/ProductCard";
 import { Accordion, Button, Carousel, Modal } from "flowbite-react";
 import { CirclePicker } from "react-color";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { BsCheckCircle } from "react-icons/bs";
 import Slider from "react-slick";
@@ -22,7 +22,123 @@ import { SampleNextArrow, SamplePrevArrow } from "components/Arrows";
 import Whatsapp from "components/Whatsapp";
 import { isMobile } from "react-device-detect";
 
-function Index({ jackets = [], base_url }) {
+function Index({ base_url }) {
+  const jackets = [
+    {
+      "#1879ae": [
+        "/0/#1879ae-front.svg",
+        "/0/#1879ae-back.svg",
+        "/0/#1879ae-side.svg",
+      ],
+      "#562b25": [
+        "/0/#562b25-front.svg",
+        "/0/#562b25-back.svg",
+        "/0/#562b25-side.svg",
+      ],
+      "#000000": [
+        "/0/#000000-front.svg",
+        "/0/#000000-back.svg",
+        "/0/#000000-side.svg",
+      ],
+      "#1d9533": [
+        "/0/#1d9533-front.svg",
+        "/0/#1d9533-back.svg",
+        "/0/#1d9533-side.svg",
+      ],
+      "#ef331a": [
+        "/0/#ef331a-front.svg",
+        "/0/#ef331a-back.svg",
+        "/0/#ef331a-side.svg",
+      ],
+    },
+    {
+      "#1879ae": [
+        "/1/#1879ae-front.svg",
+        "/1/#1879ae-back.svg",
+        "/1/#1879ae-side.svg",
+      ],
+      "#562b25": [
+        "/1/#562b25-front.svg",
+        "/1/#562b25-back.svg",
+        "/1/#562b25-side.svg",
+      ],
+      "#000000": [
+        "/1/#000000-front.svg",
+        "/1/#000000-back.svg",
+        "/1/#000000-side.svg",
+      ],
+      "#1d9533": [
+        "/1/#1d9533-front.svg",
+        "/1/#1d9533-back.svg",
+        "/1/#1d9533-side.svg",
+      ],
+      "#ef331a": [
+        "/1/#ef331a-front.svg",
+        "/1/#ef331a-back.svg",
+        "/1/#ef331a-side.svg",
+      ],
+    },
+    {
+      "#1879ae": [
+        "/2/#1879ae-front.svg",
+        "/2/#1879ae-back.svg",
+        "/2/#1879ae-side.svg",
+      ],
+      "#562b25": [
+        "/2/#562b25-front.svg",
+        "/2/#562b25-back.svg",
+        "/2/#562b25-side.svg",
+      ],
+      "#000000": [
+        "/2/#000000-front.svg",
+        "/2/#000000-back.svg",
+        "/2/#000000-side.svg",
+      ],
+      "#1d9533": [
+        "/2/#1d9533-front.svg",
+        "/2/#1d9533-back.svg",
+        "/2/#1d9533-side.svg",
+      ],
+      "#ef331a": [
+        "/2/#ef331a-front.svg",
+        "/2/#ef331a-back.svg",
+        "/2/#ef331a-side.svg",
+      ],
+    },
+    {
+      "#1879ae": [
+        "/3/#1879ae-front.svg",
+        "/3/#1879ae-back.svg",
+        "/3/#1879ae-side.svg",
+      ],
+      "#562b25": [
+        "/3/#562b25-front.svg",
+        "/3/#562b25-back.svg",
+        "/3/#562b25-side.svg",
+      ],
+      "#000000": [
+        "/3/#000000-front.svg",
+        "/3/#000000-back.svg",
+        "/3/#000000-side.svg",
+      ],
+      "#1d9533": [
+        "/3/#1d9533-front.svg",
+        "/3/#1d9533-back.svg",
+        "/3/#1d9533-side.svg",
+      ],
+      "#ef331a": [
+        "/3/#ef331a-front.svg",
+        "/3/#ef331a-back.svg",
+        "/3/#ef331a-side.svg",
+      ],
+    },
+  ];
+
+  
+  
+
+
+
   const settings = {
     dots: true,
     infinite: true,
@@ -41,7 +157,7 @@ function Index({ jackets = [], base_url }) {
   };
 
   const [selectedSize, setSelectedSize] = useState("m");
-  const [selectedColor, setSelectedColor] = useState("black");
+  const [selectedColor, setSelectedColor] = useState("#000000");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -60,13 +176,12 @@ function Index({ jackets = [], base_url }) {
     { name: "Double Extra Large", value: "xxl" },
   ];
 
-  
   const [selectedJacket, setSelectedJacket] = useState(0);
   const [result, setResult] = useState(null);
 
   const reset = () => {
     setSelectedSize("m");
-    setSelectedColor("black");
+    setSelectedColor("#000000");
     setName("");
     setSelectedJacket(0);
     setPhone("");
@@ -90,7 +205,7 @@ function Index({ jackets = [], base_url }) {
     try {
       setLoading(true);
       const res = await axios.post(base_url + "/api/orders", {
-        product_id: jackets[selectedJacket]?.id,
+        product_id: selectedJacket,
         size: selectedSize,
         color: selectedColor,
         name: name,
@@ -120,6 +235,8 @@ function Index({ jackets = [], base_url }) {
       position: "top-right",
     });
   };
+
+
 
   return (
     <div className="max-w-full mx-auto">
@@ -161,6 +278,7 @@ function Index({ jackets = [], base_url }) {
                   jacket={jacket}
                   setSelectedJacket={setSelectedJacket}
                   selectedJacket={selectedJacket}
+                  selectedColor={selectedColor}
                 />
               ))}
 
@@ -178,42 +296,27 @@ function Index({ jackets = [], base_url }) {
           <div className="col-span-7  md:px-10  ">
             {jackets.length > 0 && (
               <Slider {...settings}>
-                <div className=" !flex items-center justify-center">
-                  <div className="relative w-[380px] h-[380px]">
-                    <Image
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCADSALIDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAQACAwT/xAAWEAEBAQAAAAAAAAAAAAAAAAAAARH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APEklEkQRBAkGAWoIYBIIFJAAUDLNaooM1mtVmgyiACSApIEUQRDUBQxQyAYYpDICKw4CRxAyK0KDNZrVFBis1us0GQagCSApIEUYCjUgjUgKRqRSGQFI1IpGpAGHDhwGcWNYMBnBW8ZsBis1us0GKK1WaDNDVABFAkiCMUMAwyKRqQFI1IpGpAUhkMhkBYsOHAZxY1gwGbGbG7BYDFYrpYxQYrNbrNBmhqgGUUCRQGGCNQDGpBGoBkakUjUgKRqRSGQFhxYcBnFjQBmxmt1mgxWK6VigxWa3WaDFDVABFACiCjUEagGNxmNQGo1BGoBhihgFIgA0AZrNaooMVit1mgxWa3WaDFDVABFACUCjUEagGNQRqAY3GY1AMaZjQFJIIEVQVmtVmgzWa1WaDFFarNBmhqgAkgOIoFDEQMajMagNRqMRqA1CzGgJZIEIAqzSKDNZrVFBiitVmgyGgARQFFAkiCjUZhBqFk6DWnWdOg1pZ1aDSGjQIqACims0BWa1RQZRABFA0igCIBEICdZWg3q1nVoN6dY06DWpnToELQCBACggACASSB0RAAFAAQCWgaDWnWNOg1p1jToN6tZ06B1DUBCQIJAEkCSQOiIACkUGaKazQQ1ADq1nVoN6tZ06DWnWSDRZIFBAkkASQJJA6pIGaKaKDNZrVZoM0GsgkkBLJBqEGASCBQIJJAEkCSQOtSQM0VIGKKkDNZSBJIEUgLUSAlIEUgSSAJIEkgf/9k="
-                      src={jackets[selectedJacket].front}
-                      alt=""
-                      fill
-                      className="object-fit "
-                    />
-                  </div>
-                </div>
-                <div className=" !flex items-center justify-center">
-                  <div className="relative w-[350px] h-[380px]">
-                    <Image
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCADSALIDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAQACAwT/xAAWEAEBAQAAAAAAAAAAAAAAAAAAARH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APEklEkQRBAkGAWoIYBIIFJAAUDLNaooM1mtVmgyiACSApIEUQRDUBQxQyAYYpDICKw4CRxAyK0KDNZrVFBis1us0GQagCSApIEUYCjUgjUgKRqRSGQFI1IpGpAGHDhwGcWNYMBnBW8ZsBis1us0GKK1WaDNDVABFAkiCMUMAwyKRqQFI1IpGpAUhkMhkBYsOHAZxY1gwGbGbG7BYDFYrpYxQYrNbrNBmhqgGUUCRQGGCNQDGpBGoBkakUjUgKRqRSGQFhxYcBnFjQBmxmt1mgxWK6VigxWa3WaDFDVABFACiCjUEagGNxmNQGo1BGoBhihgFIgA0AZrNaooMVit1mgxWa3WaDFDVABFACUCjUEagGNQRqAY3GY1AMaZjQFJIIEVQVmtVmgzWa1WaDFFarNBmhqgAkgOIoFDEQMajMagNRqMRqA1CzGgJZIEIAqzSKDNZrVFBiitVmgyGgARQFFAkiCjUZhBqFk6DWnWdOg1pZ1aDSGjQIqACims0BWa1RQZRABFA0igCIBEICdZWg3q1nVoN6dY06DWpnToELQCBACggACASSB0RAAFAAQCWgaDWnWNOg1p1jToN6tZ06B1DUBCQIJAEkCSQOiIACkUGaKazQQ1ADq1nVoN6tZ06DWnWSDRZIFBAkkASQJJA6pIGaKaKDNZrVZoM0GsgkkBLJBqEGASCBQIJJAEkCSQOtSQM0VIGKKkDNZSBJIEUgLUSAlIEUgSSAJIEkgf/9k="
-                      src={jackets[selectedJacket].back}
-                      alt=""
-                      fill
-                      className="object-fit "
-                    />
-                  </div>
-                </div>
-                <div className=" !flex items-center justify-center">
-                  <div className="relative w-[350px] h-[380px]">
-                    <Image
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCADSALIDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAQACAwT/xAAWEAEBAQAAAAAAAAAAAAAAAAAAARH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APEklEkQRBAkGAWoIYBIIFJAAUDLNaooM1mtVmgyiACSApIEUQRDUBQxQyAYYpDICKw4CRxAyK0KDNZrVFBis1us0GQagCSApIEUYCjUgjUgKRqRSGQFI1IpGpAGHDhwGcWNYMBnBW8ZsBis1us0GKK1WaDNDVABFAkiCMUMAwyKRqQFI1IpGpAUhkMhkBYsOHAZxY1gwGbGbG7BYDFYrpYxQYrNbrNBmhqgGUUCRQGGCNQDGpBGoBkakUjUgKRqRSGQFhxYcBnFjQBmxmt1mgxWK6VigxWa3WaDFDVABFACiCjUEagGNxmNQGo1BGoBhihgFIgA0AZrNaooMVit1mgxWa3WaDFDVABFACUCjUEagGNQRqAY3GY1AMaZjQFJIIEVQVmtVmgzWa1WaDFFarNBmhqgAkgOIoFDEQMajMagNRqMRqA1CzGgJZIEIAqzSKDNZrVFBiitVmgyGgARQFFAkiCjUZhBqFk6DWnWdOg1pZ1aDSGjQIqACims0BWa1RQZRABFA0igCIBEICdZWg3q1nVoN6dY06DWpnToELQCBACggACASSB0RAAFAAQCWgaDWnWNOg1p1jToN6tZ06B1DUBCQIJAEkCSQOiIACkUGaKazQQ1ADq1nVoN6tZ06DWnWSDRZIFBAkkASQJJA6pIGaKaKDNZrVZoM0GsgkkBLJBqEGASCBQIJJAEkCSQOtSQM0VIGKKkDNZSBJIEUgLUSAlIEUgSSAJIEkgf/9k="
-                      src={jackets[selectedJacket].right_side}
-                      alt=""
-                      fill
-                      className="object-fit "
-                    />
-                  </div>
-                </div>
+                {jackets[selectedJacket][selectedColor] &&
+                  jackets[selectedJacket][selectedColor].map((jacket, i) => (
+                    <div key={i} className=" !flex items-center justify-center">
+                      <div className="relative w-[380px] h-[380px]">
+                        {/* <img
+                          placeholder="blur"
+                          src={`/${encodeURIComponent(jacket)}`}
+                          alt=""
+                          className="object-fit "
+                        /> */}
+                        <Image
+                          placeholder="blur"
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCADSALIDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAQACAwT/xAAWEAEBAQAAAAAAAAAAAAAAAAAAARH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APEklEkQRBAkGAWoIYBIIFJAAUDLNaooM1mtVmgyiACSApIEUQRDUBQxQyAYYpDICKw4CRxAyK0KDNZrVFBis1us0GQagCSApIEUYCjUgjUgKRqRSGQFI1IpGpAGHDhwGcWNYMBnBW8ZsBis1us0GKK1WaDNDVABFAkiCMUMAwyKRqQFI1IpGpAUhkMhkBYsOHAZxY1gwGbGbG7BYDFYrpYxQYrNbrNBmhqgGUUCRQGGCNQDGpBGoBkakUjUgKRqRSGQFhxYcBnFjQBmxmt1mgxWK6VigxWa3WaDFDVABFACiCjUEagGNxmNQGo1BGoBhihgFIgA0AZrNaooMVit1mgxWa3WaDFDVABFACUCjUEagGNQRqAY3GY1AMaZjQFJIIEVQVmtVmgzWa1WaDFFarNBmhqgAkgOIoFDEQMajMagNRqMRqA1CzGgJZIEIAqzSKDNZrVFBiitVmgyGgARQFFAkiCjUZhBqFk6DWnWdOg1pZ1aDSGjQIqACims0BWa1RQZRABFA0igCIBEICdZWg3q1nVoN6dY06DWpnToELQCBACggACASSB0RAAFAAQCWgaDWnWNOg1p1jToN6tZ06B1DUBCQIJAEkCSQOiIACkUGaKazQQ1ADq1nVoN6tZ06DWnWSDRZIFBAkkASQJJA6pIGaKaKDNZrVZoM0GsgkkBLJBqEGASCBQIJJAEkCSQOtSQM0VIGKKkDNZSBJIEUgLUSAlIEUgSSAJIEkgf/9k="
+                          src={`/${encodeURIComponent(jacket)}`}
+                          alt=""
+                          fill
+                          className="object-fit "
+                        />
+                      </div>
+                    </div>
+                  ))}
               </Slider>
             )}
             <div className="w-full flex flex-col items-center space-y-4 justify-center my-10  ">
@@ -222,11 +325,10 @@ function Index({ jackets = [], base_url }) {
                 <CirclePicker
                   colors={[
                     "#000000",
-                    "#F4F4F4",
-                    "#2970FF",
-                    "#6A5353",
-                    "#E2BB8D",
-                    "#151867",
+                    "#1879ae",
+                    "#562b25",
+                    "#1d9533",
+                    "#ef331a",
                   ]}
                   onChange={(color) => setSelectedColor(color.hex)}
                   color={selectedColor}

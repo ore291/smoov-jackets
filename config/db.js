@@ -6,10 +6,10 @@ try {
    pool = mysql({
   config: {
     host: "sql8.freemysqlhosting.net",
-    user: "sql8604058",
-    password: "qYK1L7wCNF",
+    user: "sql8610163",
+    password: "tMv7D2hg46",
     port: 3306,
-    database: "sql8604058",
+    database: "sql8610163",
   },
 });
 } catch (error) {
