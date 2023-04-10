@@ -6,7 +6,10 @@ body {
   background-image: url('/bg.jpg');
 }
 
-
+.circle-picker{
+  align-items: center !important;
+  justify-content: center !important;
+}
 
 
 
